@@ -73,7 +73,7 @@ void TrafficLight::cycleThroughPhases()
 
     std::random_device rd;
     std::mt19937 gen(rd());
-    std::uniform_int_distribution<> distr(4,6);
+    std::uniform_int_distribution<> distr(4000,6000);
 
     double cycleDuration = distr(gen);
     while(true) {
@@ -96,6 +96,7 @@ void TrafficLight::cycleThroughPhases()
 
             auto lastUpdate = std::chrono::system_clock::now();
             cycleDuration = distr(gen);
+
         }
 
 
