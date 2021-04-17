@@ -44,10 +44,11 @@ void TrafficLight::waitForGreen()
     // runs and repeatedly calls the receive function on the message queue. 
     // Once it receives TrafficLightPhase::green, the method returns.
     while(true) {
-        TrafficLightPhase message = _queue->receive();
+        TrafficLightPhase message = _queue.receive();
         if (message == TrafficLightPhase::green) {
             return;
         }
+        std::this_thread::sleep_for(std::chrono::milliseconds(1));
     }   
 }
 TrafficLightPhase TrafficLight::getCurrentPhase()
@@ -68,8 +69,7 @@ void TrafficLight::cycleThroughPhases()
     // and toggles the current phase of the traffic light between red and green and sends an update method 
     // to the message queue using move semantics. The cycle duration should be a random value between 4 and 6 seconds. 
     // Also, the while-loop should use std::this_thread::sleep_for to wait 1ms between two cycles. 
-    std::chrono::time_point<std::chrono::system_clock> lastUpdate;
-    lastUpdate = std::chrono::system_clock::now();
+    auto lastUpdate = std::chrono::system_clock::now();
 
     std::random_device rd;
     std::mt19937 gen(rd());
@@ -90,8 +90,8 @@ void TrafficLight::cycleThroughPhases()
             }
 
             auto msg = _currentPhase;
-            //CHECK:
-            auto ftr = std::async(&MessageQueue<TrafficLightPhase>::send, _queue, std::move(msg));
+            //CHECK: this is in sync anyway, if I block right after? -> call send directly?
+            auto ftr = std::async(&MessageQueue<TrafficLightPhase>::send, &_queue, std::move(msg));
             ftr.wait();
 
             auto lastUpdate = std::chrono::system_clock::now();

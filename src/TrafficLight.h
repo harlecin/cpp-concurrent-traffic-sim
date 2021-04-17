@@ -45,7 +45,6 @@ public:
     TrafficLight();
 
     // getters / setters
-    void setCurrentPhase();
     TrafficLightPhase getCurrentPhase();
 
     // typical behaviour methods
@@ -61,8 +60,9 @@ private:
 
     std::condition_variable _condition;
     std::mutex _mutex;
-    // CHECK
-    std::shared_ptr<MessageQueue<TrafficLightPhase>> _queue;
+    MessageQueue<TrafficLightPhase> _queue;
+    //CHECK:
+    //std::shared_ptr<MessageQueue<TrafficLightPhase>> _queue;
 };
 
 #endif
