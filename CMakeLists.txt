@@ -16,3 +16,4 @@ file(GLOB project_SRCS src/*.cpp) #src/*.h
 # Add project executable
 add_executable(traffic_simulation ${project_SRCS})
 target_link_libraries(traffic_simulation ${OpenCV_LIBRARIES})
+target_compile_options(traffic_simulation PRIVATE -Wall -Wextra -pedantic)
