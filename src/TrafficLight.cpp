@@ -47,7 +47,6 @@ void TrafficLight::waitForGreen()
         if (message == TrafficLightPhase::green) {
             return;
         }
-        std::this_thread::sleep_for(std::chrono::milliseconds(1));
     }   
 }
 TrafficLightPhase TrafficLight::getCurrentPhase()
@@ -84,9 +83,6 @@ void TrafficLight::cycleThroughPhases()
 
             _currentPhase = (_currentPhase==TrafficLightPhase::red) ? TrafficLightPhase::green : TrafficLightPhase::red;
 
-            //CHECK: this is in sync anyway, if I block right after? -> call send directly?
-            //auto ftr = std::async(&MessageQueue<TrafficLightPhase>::send, &_queue, std::move(msg));
-            //ftr.wait();
             _queue.send(std::move(_currentPhase));
 
             lastUpdate = std::chrono::system_clock::now();
